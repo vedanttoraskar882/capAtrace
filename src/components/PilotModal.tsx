@@ -40,6 +40,10 @@ export const PilotModal: React.FC<PilotModalProps> = ({ isOpen, onClose, trigger
     setSuccessMessage(null);
     setFormErrors({});
 
+    if (modalRef.current) {
+      modalRef.current.scrollTop = 0;
+    }
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault();
@@ -71,9 +75,9 @@ export const PilotModal: React.FC<PilotModalProps> = ({ isOpen, onClose, trigger
 
     window.addEventListener('keydown', handleKeyDown);
 
-    // Focus first input
+    // Focus first input without causing unwanted viewport jump
     const timer = setTimeout(() => {
-      firstInputRef.current?.focus();
+      firstInputRef.current?.focus({ preventScroll: true });
     }, 50);
 
     return () => {
@@ -85,15 +89,12 @@ export const PilotModal: React.FC<PilotModalProps> = ({ isOpen, onClose, trigger
   if (!isOpen) return null;
 
   const validatePhone = (phone: string): boolean => {
-    // Accepts UK and international formats: digits, spaces, parentheses, hyphens, and optional leading +
-    // Min 7 digits to prevent trivial junk
     const digitsOnly = phone.replace(/\D/g, '');
     const validCharacters = /^[+\d\s().-]+$/.test(phone);
     return validCharacters && digitsOnly.length >= 7 && digitsOnly.length <= 16;
   };
 
   const validateEmail = (email: string): boolean => {
-    // Standard RFC-compliant relaxed email regex
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
@@ -140,7 +141,6 @@ export const PilotModal: React.FC<PilotModalProps> = ({ isOpen, onClose, trigger
     setIsSubmitting(true);
 
     try {
-      // 1. Immediately before each save, read the current value using localStorage.getItem()
       const rawCurrent = localStorage.getItem(STORAGE_KEY);
       let requestsArray: PilotRequest[] = [];
 
@@ -149,7 +149,6 @@ export const PilotModal: React.FC<PilotModalProps> = ({ isOpen, onClose, trigger
         try {
           parsed = JSON.parse(rawCurrent);
         } catch {
-          // If existing data cannot be parsed, preserve original value and show error
           setStorageError(
             'Existing local storage data is corrupted and could not be parsed. The original data has been preserved without modification. Please contact site administration or inspect your browser storage.'
           );
@@ -157,7 +156,6 @@ export const PilotModal: React.FC<PilotModalProps> = ({ isOpen, onClose, trigger
           return;
         }
 
-        // Verify that it is an array
         if (!Array.isArray(parsed)) {
           setStorageError(
             'Existing local storage data is not a valid list. The original data has been preserved without modification.'
@@ -169,29 +167,23 @@ export const PilotModal: React.FC<PilotModalProps> = ({ isOpen, onClose, trigger
         requestsArray = parsed as PilotRequest[];
       }
 
-      // 2. Automatically generate timestamp using new Date().toISOString()
       const newEntry: PilotRequest = {
         fullName: trimmedName,
-        phoneNumber: trimmedPhone, // String preserved with leading zero/country code
+        phoneNumber: trimmedPhone,
         emailAddress: trimmedEmail,
         organisationName: trimmedOrg,
         submittedAt: new Date().toISOString(),
       };
 
-      // 3. Append the new object
       requestsArray.push(newEntry);
-
-      // 4. Save entire updated array with localStorage.setItem()
       localStorage.setItem(STORAGE_KEY, JSON.stringify(requestsArray));
 
-      // 5. Only after a successful write: clear the form and show success message
       setFullName('');
       setPhoneNumber('');
       setEmailAddress('');
       setOrganisationName('');
       setSuccessMessage('Pilot request saved in this browser.');
     } catch {
-      // If access or writing fails (e.g. storage disabled or quota full), keep visitor typed values
       setStorageError(
         'Unable to write to local browser storage. Please check browser privacy/quota settings and retry.'
       );
@@ -276,7 +268,6 @@ export const PilotModal: React.FC<PilotModalProps> = ({ isOpen, onClose, trigger
                   setFormErrors((prev) => ({ ...prev, fullName: '' }));
                 }
               }}
-              placeholder="e.g. Dr Sarah Jenkins"
               className={`form-input ${formErrors.fullName ? 'input-error' : ''}`}
               aria-invalid={!!formErrors.fullName}
               aria-describedby={formErrors.fullName ? 'fullName-error' : undefined}
@@ -305,7 +296,6 @@ export const PilotModal: React.FC<PilotModalProps> = ({ isOpen, onClose, trigger
                   setFormErrors((prev) => ({ ...prev, phoneNumber: '' }));
                 }
               }}
-              placeholder="e.g. +44 7911 123456 or 0121 496 0123"
               className={`form-input ${formErrors.phoneNumber ? 'input-error' : ''}`}
               aria-invalid={!!formErrors.phoneNumber}
               aria-describedby={formErrors.phoneNumber ? 'phoneNumber-error' : undefined}
@@ -334,7 +324,6 @@ export const PilotModal: React.FC<PilotModalProps> = ({ isOpen, onClose, trigger
                   setFormErrors((prev) => ({ ...prev, emailAddress: '' }));
                 }
               }}
-              placeholder="e.g. s.jenkins@occupationalhealth.co.uk"
               className={`form-input ${formErrors.emailAddress ? 'input-error' : ''}`}
               aria-invalid={!!formErrors.emailAddress}
               aria-describedby={formErrors.emailAddress ? 'emailAddress-error' : undefined}
@@ -363,7 +352,6 @@ export const PilotModal: React.FC<PilotModalProps> = ({ isOpen, onClose, trigger
                   setFormErrors((prev) => ({ ...prev, organisationName: '' }));
                 }
               }}
-              placeholder="e.g. West Midlands Occupational Health Ltd"
               className={`form-input ${formErrors.organisationName ? 'input-error' : ''}`}
               aria-invalid={!!formErrors.organisationName}
               aria-describedby={formErrors.organisationName ? 'organisationName-error' : undefined}
@@ -373,10 +361,6 @@ export const PilotModal: React.FC<PilotModalProps> = ({ isOpen, onClose, trigger
                 {formErrors.organisationName}
               </span>
             )}
-          </div>
-
-          <div className="form-notice">
-            This form saves your request in this browser on this device. Your details are not sent to CapaTrace.
           </div>
 
           <div className="modal-actions">
@@ -393,7 +377,7 @@ export const PilotModal: React.FC<PilotModalProps> = ({ isOpen, onClose, trigger
               className="btn btn-primary"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Saving...' : 'Save pilot request'}
+              {isSubmitting ? 'Sending...' : 'Send a pilot request'}
             </button>
           </div>
         </form>

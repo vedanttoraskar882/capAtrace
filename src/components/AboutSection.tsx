@@ -7,7 +7,7 @@ export const AboutSection: React.FC = () => {
       <div className="container">
         {/* Section Header */}
         <div className="section-header text-center">
-          <span className="badge badge-teal">Clinical & Biomechanical Context</span>
+          <span className="badge badge-teal">Clinical &amp; Biomechanical Context</span>
           <h2 id="about-heading" className="section-title">
             Why CapaTrace is being developed
           </h2>
@@ -50,13 +50,10 @@ export const AboutSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Founder Profile Card */}
+        {/* Founder Profile Card (No photo or avatar placeholder) */}
         <div className="founder-wrapper">
           <div className="founder-card" role="region" aria-label="Founder Profile">
             <div className="founder-header">
-              <div className="founder-avatar-typographic" aria-hidden="true">
-                <span>AD</span>
-              </div>
               <div className="founder-info">
                 <span className="founder-role">Founder, CapaTrace</span>
                 <h3 className="founder-name">Alester Jesvin Dsouza</h3>

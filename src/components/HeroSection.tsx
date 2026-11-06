@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowDown, Shield, FileCheck2, Cpu } from 'lucide-react';
+import { ArrowDown, Shield, FileCheck2, Cpu, Activity } from 'lucide-react';
 
 interface HeroSectionProps {
   onRequestPilot: (triggerElem?: HTMLElement | null) => void;
@@ -8,13 +8,19 @@ interface HeroSectionProps {
 export const HeroSection: React.FC<HeroSectionProps> = ({ onRequestPilot }) => {
   return (
     <section id="home" className="hero-section" aria-labelledby="hero-title">
-      <div className="container">
+      {/* Ambient background glows */}
+      <div className="hero-ambient-glow" aria-hidden="true" />
+      <div className="hero-ambient-glow-2" aria-hidden="true" />
+
+      <div className="container relative-z">
         <div className="hero-grid">
           {/* Hero Copy */}
           <div className="hero-content">
             <div className="status-badge-row">
-              <span className="badge badge-subtle">
-                <span className="badge-dot" aria-hidden="true"></span>
+              <span className="badge badge-teal badge-animated">
+                <span className="live-pulse-ring" aria-hidden="true">
+                  <span className="pulse-core" />
+                </span>
                 Proposed UK Service &bull; Planning Phase
               </span>
             </div>
@@ -42,7 +48,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onRequestPilot }) => {
               </a>
             </div>
 
-            {/* Credibility / Technical Architecture Anchors */}
+            {/* Credibility Anchors */}
             <div className="hero-features-list">
               <div className="hero-feature-item">
                 <Cpu size={18} className="feature-icon" aria-hidden="true" />
@@ -62,8 +68,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onRequestPilot }) => {
           {/* Hero Biomechanical & Trace Visual */}
           <div className="hero-visual-card" role="region" aria-label="Biomechanical Lift Trace Demonstration">
             <div className="card-topbar">
-              <span className="card-topbar-title">Instrumented Biomechanical Capture</span>
-              <span className="status-pill">Continuous Waveform Telemetry</span>
+              <div className="topbar-left">
+                <Activity size={16} className="topbar-icon" aria-hidden="true" />
+                <span className="card-topbar-title">Instrumented Biomechanical Capture</span>
+              </div>
+              <span className="status-pill">
+                <span className="live-dot" aria-hidden="true" />
+                Continuous Waveform Telemetry
+              </span>
             </div>
 
             <div className="telemetry-display">
@@ -75,181 +87,200 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onRequestPilot }) => {
                 aria-label="Illustrative warehouse lifting task with corresponding force-over-time curve"
               >
                 <defs>
-                  {/* Subtle Grid Pattern */}
+                  {/* Fine Engineering Grid */}
                   <pattern id="biomechGrid" width="20" height="20" patternUnits="userSpaceOnUse">
-                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(15, 118, 110, 0.08)" strokeWidth="1" />
+                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(15, 118, 110, 0.07)" strokeWidth="1" />
                   </pattern>
+
+                  {/* Gradient for Trace Area */}
                   <linearGradient id="curveGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#0d9488" stopOpacity="0.25" />
+                    <stop offset="0%" stopColor="#0d9488" stopOpacity="0.28" />
+                    <stop offset="60%" stopColor="#0284c7" stopOpacity="0.10" />
                     <stop offset="100%" stopColor="#0d9488" stopOpacity="0.0" />
                   </linearGradient>
+
+                  {/* High-visibility Trace Line Gradient */}
                   <linearGradient id="accentLine" x1="0" y1="0" x2="1" y2="0">
                     <stop offset="0%" stopColor="#0284c7" />
-                    <stop offset="50%" stopColor="#0d9488" />
+                    <stop offset="45%" stopColor="#0d9488" />
                     <stop offset="100%" stopColor="#0f766e" />
                   </linearGradient>
+
+                  {/* Glow filter for active trace */}
+                  <filter id="traceGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#0d9488" floodOpacity="0.35" />
+                  </filter>
                 </defs>
 
-                {/* Background Grid */}
+                {/* Base Surface with Grid */}
                 <rect x="0" y="0" width="680" height="340" fill="#f8fafc" rx="8" />
-                <rect x="20" y="20" width="640" height="300" fill="url(#biomechGrid)" rx="6" />
+                <rect x="15" y="15" width="650" height="310" fill="url(#biomechGrid)" rx="6" />
 
                 {/* Left Panel: Illustrative Warehouse Lifting Task */}
-                <g className="task-graphic" transform="translate(30, 20)">
-                  <rect x="0" y="0" width="200" height="295" fill="rgba(255,255,255,0.7)" rx="6" stroke="#e2e8f0" strokeWidth="1" />
-                  <text x="100" y="24" textAnchor="middle" className="svg-label-bold" fill="#0f172a" fontSize="11" fontWeight="700">
+                <g className="task-graphic" transform="translate(25, 20)">
+                  <rect
+                    x="0"
+                    y="0"
+                    width="205"
+                    height="300"
+                    fill="rgba(255,255,255,0.85)"
+                    rx="8"
+                    stroke="#e2e8f0"
+                    strokeWidth="1.2"
+                  />
+                  <text x="102" y="26" textAnchor="middle" fill="#0f172a" fontSize="11" fontWeight="700">
                     Warehouse Picking Task
                   </text>
-                  <text x="100" y="38" textAnchor="middle" className="svg-label-sub" fill="#64748b" fontSize="9">
+                  <text x="102" y="40" textAnchor="middle" fill="#64748b" fontSize="9" fontWeight="500">
                     Floor-to-Waist Lift (15 kg)
                   </text>
 
                   {/* Floor line & pallet */}
-                  <line x1="20" y1="260" x2="180" y2="260" stroke="#94a3b8" strokeWidth="2" strokeDasharray="3 3" />
-                  <rect x="35" y="250" width="130" height="10" fill="#cbd5e1" rx="2" />
+                  <line x1="20" y1="262" x2="185" y2="262" stroke="#94a3b8" strokeWidth="2" strokeDasharray="3 3" />
+                  <rect x="35" y="252" width="135" height="10" fill="#cbd5e1" rx="2" />
 
-                  {/* Biomechanical stick figure in lifting position */}
+                  {/* Biomechanical figure in lifting position */}
                   {/* Head */}
-                  <circle cx="90" cy="85" r="10" fill="#0f766e" />
+                  <circle cx="92" cy="85" r="11" fill="#0f766e" />
                   {/* Spine / Torso */}
-                  <line x1="90" y1="95" x2="105" y2="155" stroke="#0f766e" strokeWidth="5" strokeLinecap="round" />
+                  <line x1="92" y1="96" x2="108" y2="158" stroke="#0f766e" strokeWidth="5.5" strokeLinecap="round" />
                   {/* Pelvis / Hip Joint */}
-                  <circle cx="105" cy="155" r="5" fill="#0284c7" />
+                  <circle cx="108" cy="158" r="5.5" fill="#0284c7" />
                   {/* Thigh */}
-                  <line x1="105" y1="155" x2="80" y2="195" stroke="#0f766e" strokeWidth="4.5" strokeLinecap="round" />
+                  <line x1="108" y1="158" x2="82" y2="200" stroke="#0f766e" strokeWidth="5" strokeLinecap="round" />
                   {/* Knee Joint */}
-                  <circle cx="80" cy="195" r="4" fill="#0284c7" />
+                  <circle cx="82" cy="200" r="4.5" fill="#0284c7" />
                   {/* Shank / Calf */}
-                  <line x1="80" y1="195" x2="95" y2="250" stroke="#0f766e" strokeWidth="4.5" strokeLinecap="round" />
+                  <line x1="82" y1="200" x2="98" y2="252" stroke="#0f766e" strokeWidth="5" strokeLinecap="round" />
                   {/* Foot */}
-                  <line x1="90" y1="250" x2="120" y2="250" stroke="#0f172a" strokeWidth="4" strokeLinecap="round" />
+                  <line x1="94" y1="252" x2="124" y2="252" stroke="#0f172a" strokeWidth="4.5" strokeLinecap="round" />
 
                   {/* Arm & Shoulder */}
-                  <circle cx="93" cy="110" r="4" fill="#0284c7" />
-                  <line x1="93" y1="110" x2="120" y2="160" stroke="#0d9488" strokeWidth="4" strokeLinecap="round" />
-                  <circle cx="120" cy="160" r="3.5" fill="#0284c7" />
-                  <line x1="120" y1="160" x2="135" y2="200" stroke="#0d9488" strokeWidth="4" strokeLinecap="round" />
+                  <circle cx="95" cy="112" r="4.5" fill="#0284c7" />
+                  <line x1="95" y1="112" x2="122" y2="162" stroke="#0d9488" strokeWidth="4.5" strokeLinecap="round" />
+                  <circle cx="122" cy="162" r="4" fill="#0284c7" />
+                  <line x1="122" y1="162" x2="138" y2="202" stroke="#0d9488" strokeWidth="4.5" strokeLinecap="round" />
 
                   {/* Crate with handles on load cell plate */}
-                  <rect x="125" y="195" width="45" height="42" fill="#e0f2fe" stroke="#0284c7" strokeWidth="2" rx="3" />
-                  <line x1="135" y1="195" x2="135" y2="190" stroke="#0284c7" strokeWidth="2" strokeLinecap="round" />
-                  <text x="147" y="220" textAnchor="middle" fill="#0369a1" fontSize="9" fontWeight="600">
+                  <rect x="128" y="196" width="46" height="44" fill="#e0f2fe" stroke="#0284c7" strokeWidth="2" rx="4" />
+                  <line x1="138" y1="196" x2="138" y2="190" stroke="#0284c7" strokeWidth="2.5" strokeLinecap="round" />
+                  <text x="151" y="222" textAnchor="middle" fill="#0369a1" fontSize="9.5" fontWeight="700">
                     LOAD
                   </text>
 
-                  {/* Force vector arrow */}
-                  <line x1="147" y1="190" x2="147" y2="165" stroke="#ef4444" strokeWidth="2.5" markerEnd="url(#arrow)" />
-                  <polygon points="147,155 143,165 151,165" fill="#ef4444" />
-                  <text x="156" y="165" fill="#b91c1c" fontSize="8.5" fontWeight="700">
+                  {/* Dynamic Force vector arrow */}
+                  <line x1="151" y1="190" x2="151" y2="162" stroke="#ef4444" strokeWidth="2.5" />
+                  <polygon points="151,154 146,164 156,164" fill="#ef4444" />
+                  <text x="162" y="165" fill="#b91c1c" fontSize="9" fontWeight="800">
                     Fz
                   </text>
 
-                  {/* Load cell rig platform */}
-                  <rect x="115" y="244" width="65" height="6" fill="#047857" rx="1" />
-                  <text x="100" y="280" textAnchor="middle" fill="#475569" fontSize="8" fontWeight="600">
+                  {/* Load cell platform */}
+                  <rect x="118" y="246" width="68" height="6" fill="#047857" rx="1.5" />
+                  <text x="102" y="282" textAnchor="middle" fill="#475569" fontSize="8.5" fontWeight="600">
                     Load Cell Floor Rig
                   </text>
                 </g>
 
                 {/* Right Panel: Force-Over-Time Trace Graph */}
-                <g className="trace-graph" transform="translate(255, 30)">
+                <g className="trace-graph" transform="translate(260, 25)">
                   {/* Coordinate Axes */}
-                  {/* Y-Axis: Force */}
-                  <line x1="50" y1="20" x2="50" y2="250" stroke="#64748b" strokeWidth="1.5" />
-                  {/* X-Axis: Time */}
-                  <line x1="50" y1="250" x2="395" y2="250" stroke="#64748b" strokeWidth="1.5" />
+                  <line x1="50" y1="20" x2="50" y2="255" stroke="#64748b" strokeWidth="1.5" />
+                  <line x1="50" y1="255" x2="395" y2="255" stroke="#64748b" strokeWidth="1.5" />
 
-                  {/* Y-Axis Labels */}
-                  <text x="40" y="25" textAnchor="end" fill="#0f172a" fontSize="10" fontWeight="700" fontFamily="sans-serif">
+                  {/* Y-Axis: Force Labels */}
+                  <text x="40" y="25" textAnchor="end" fill="#0f172a" fontSize="10.5" fontWeight="800">
                     Force
                   </text>
-                  <text x="40" y="75" textAnchor="end" fill="#64748b" fontSize="9" fontFamily="monospace">
+                  <text x="40" y="80" textAnchor="end" fill="#64748b" fontSize="9" fontFamily="monospace">
                     300 N
                   </text>
-                  <text x="40" y="130" textAnchor="end" fill="#64748b" fontSize="9" fontFamily="monospace">
+                  <text x="40" y="135" textAnchor="end" fill="#64748b" fontSize="9" fontFamily="monospace">
                     200 N
                   </text>
-                  <text x="40" y="190" textAnchor="end" fill="#64748b" fontSize="9" fontFamily="monospace">
+                  <text x="40" y="195" textAnchor="end" fill="#64748b" fontSize="9" fontFamily="monospace">
                     100 N
                   </text>
-                  <text x="40" y="250" textAnchor="end" fill="#64748b" fontSize="9" fontFamily="monospace">
+                  <text x="40" y="255" textAnchor="end" fill="#64748b" fontSize="9" fontFamily="monospace">
                     0 N
                   </text>
 
                   {/* Horizontal Guideline Dashes */}
-                  <line x1="50" y1="75" x2="395" y2="75" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="2 2" />
-                  <line x1="50" y1="130" x2="395" y2="130" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="2 2" />
-                  <line x1="50" y1="190" x2="395" y2="190" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="2 2" />
+                  <line x1="50" y1="80" x2="395" y2="80" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="3 3" />
+                  <line x1="50" y1="135" x2="395" y2="135" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="3 3" />
+                  <line x1="50" y1="195" x2="395" y2="195" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="3 3" />
 
-                  {/* X-Axis Labels */}
-                  <text x="395" y="268" textAnchor="end" fill="#0f172a" fontSize="10" fontWeight="700" fontFamily="sans-serif">
+                  {/* X-Axis: Time Labels */}
+                  <text x="395" y="274" textAnchor="end" fill="#0f172a" fontSize="10.5" fontWeight="800">
                     Time
                   </text>
-                  <text x="50" y="268" textAnchor="middle" fill="#64748b" fontSize="9" fontFamily="monospace">
+                  <text x="50" y="274" textAnchor="middle" fill="#64748b" fontSize="9" fontFamily="monospace">
                     0s
                   </text>
-                  <text x="135" y="268" textAnchor="middle" fill="#64748b" fontSize="9" fontFamily="monospace">
+                  <text x="135" y="274" textAnchor="middle" fill="#64748b" fontSize="9" fontFamily="monospace">
                     1.0s
                   </text>
-                  <text x="220" y="268" textAnchor="middle" fill="#64748b" fontSize="9" fontFamily="monospace">
+                  <text x="220" y="274" textAnchor="middle" fill="#64748b" fontSize="9" fontFamily="monospace">
                     2.0s
                   </text>
-                  <text x="305" y="268" textAnchor="middle" fill="#64748b" fontSize="9" fontFamily="monospace">
+                  <text x="305" y="274" textAnchor="middle" fill="#64748b" fontSize="9" fontFamily="monospace">
                     3.0s
                   </text>
-                  <text x="380" y="268" textAnchor="middle" fill="#64748b" fontSize="9" fontFamily="monospace">
+                  <text x="385" y="274" textAnchor="middle" fill="#64748b" fontSize="9" fontFamily="monospace">
                     4.0s
                   </text>
 
-                  {/* Waveform Area Fill */}
+                  {/* Filled Waveform Area */}
                   <path
-                    d="M 50 250 
-                       Q 90 250 110 200 
+                    d="M 50 255 
+                       Q 90 255 110 200 
                        T 160 85 
                        Q 190 70 230 75 
                        T 290 95 
-                       Q 330 130 355 240 
-                       L 375 250 Z"
+                       Q 330 130 355 245 
+                       L 375 255 Z"
                     fill="url(#curveGradient)"
                   />
 
-                  {/* Continuous Force Waveform Stroke */}
+                  {/* Continuous Force Waveform Stroke with Glow Filter */}
                   <path
-                    d="M 50 250 
-                       Q 90 250 110 200 
+                    d="M 50 255 
+                       Q 90 255 110 200 
                        T 160 85 
                        Q 190 70 230 75 
                        T 290 95 
-                       Q 330 130 355 240 
-                       L 375 250"
+                       Q 330 130 355 245 
+                       L 375 255"
                     fill="none"
                     stroke="url(#accentLine)"
                     strokeWidth="3.5"
                     strokeLinecap="round"
+                    filter="url(#traceGlow)"
+                    className="animated-trace-line"
                   />
 
-                  {/* Key Measurement Annotations */}
+                  {/* Key Telemetry Annotations */}
                   {/* Point 1: Rate of Force Development */}
                   <circle cx="128" cy="140" r="4.5" fill="#0284c7" stroke="#ffffff" strokeWidth="2" />
                   <line x1="128" y1="140" x2="105" y2="100" stroke="#0284c7" strokeWidth="1" />
-                  <rect x="60" y="86" width="85" height="18" fill="#ffffff" stroke="#93c5fd" rx="3" />
-                  <text x="102" y="99" textAnchor="middle" fill="#0369a1" fontSize="8" fontWeight="600">
+                  <rect x="60" y="86" width="88" height="20" fill="#ffffff" stroke="#93c5fd" rx="4" />
+                  <text x="104" y="100" textAnchor="middle" fill="#0369a1" fontSize="8.5" fontWeight="700">
                     Ascent / Rate (RFD)
                   </text>
 
                   {/* Point 2: Peak & Sustained Load */}
-                  <circle cx="210" cy="73" r="4.5" fill="#0d9488" stroke="#ffffff" strokeWidth="2" />
-                  <line x1="210" y1="73" x2="210" y2="40" stroke="#0d9488" strokeWidth="1" />
-                  <rect x="165" y="25" width="90" height="18" fill="#ffffff" stroke="#5eead4" rx="3" />
-                  <text x="210" y="38" textAnchor="middle" fill="#0f766e" fontSize="8" fontWeight="700">
+                  <circle cx="210" cy="73" r="5" fill="#0d9488" stroke="#ffffff" strokeWidth="2" />
+                  <line x1="210" y1="73" x2="210" y2="38" stroke="#0d9488" strokeWidth="1" />
+                  <rect x="162" y="24" width="96" height="20" fill="#ffffff" stroke="#5eead4" rx="4" />
+                  <text x="210" y="38" textAnchor="middle" fill="#0f766e" fontSize="8.5" fontWeight="800">
                     Sustained Lift Force
                   </text>
 
                   {/* Point 3: Controlled Descent */}
                   <circle cx="330" cy="130" r="4.5" fill="#0284c7" stroke="#ffffff" strokeWidth="2" />
                   <line x1="330" y1="130" x2="355" y2="100" stroke="#0284c7" strokeWidth="1" />
-                  <rect x="315" y="86" width="85" height="18" fill="#ffffff" stroke="#93c5fd" rx="3" />
-                  <text x="357" y="99" textAnchor="middle" fill="#0369a1" fontSize="8" fontWeight="600">
+                  <rect x="312" y="86" width="88" height="20" fill="#ffffff" stroke="#93c5fd" rx="4" />
+                  <text x="356" y="100" textAnchor="middle" fill="#0369a1" fontSize="8.5" fontWeight="700">
                     Controlled Release
                   </text>
                 </g>

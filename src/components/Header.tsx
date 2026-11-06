@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, Activity } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 interface HeaderProps {
   onRequestPilot: (triggerElem?: HTMLElement | null) => void;
@@ -24,11 +24,8 @@ export const Header: React.FC<HeaderProps> = ({ onRequestPilot }) => {
   return (
     <header className="site-header" role="banner">
       <div className="container header-inner">
-        {/* CapaTrace Wordmark with Biomechanical Trace Icon */}
+        {/* CapaTrace Wordmark (Clean typographic mark with no icon logo) */}
         <a href="#home" className="brand-logo" aria-label="CapaTrace Home">
-          <div className="brand-icon-wrapper" aria-hidden="true">
-            <Activity className="brand-icon" size={20} />
-          </div>
           <span className="brand-text">
             Capa<span className="brand-accent">Trace</span>
           </span>

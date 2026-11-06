@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, ArrowUp } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 
 interface FooterProps {
   onRequestPilot: (triggerElem?: HTMLElement | null) => void;
@@ -23,12 +23,9 @@ export const Footer: React.FC<FooterProps> = ({ onRequestPilot }) => {
     <footer className="site-footer" role="contentinfo">
       <div className="container footer-inner">
         <div className="footer-top-row">
-          {/* Brand Wordmark & Descriptor */}
+          {/* Brand Wordmark & Descriptor (Clean typographic mark) */}
           <div className="footer-brand-col">
             <a href="#home" className="brand-logo" aria-label="CapaTrace Home">
-              <div className="brand-icon-wrapper" aria-hidden="true">
-                <Activity className="brand-icon" size={20} />
-              </div>
               <span className="brand-text">
                 Capa<span className="brand-accent">Trace</span>
               </span>
